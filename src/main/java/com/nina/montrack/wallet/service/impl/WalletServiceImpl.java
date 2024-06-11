@@ -3,6 +3,7 @@ package com.nina.montrack.wallet.service.impl;
 import com.nina.montrack.currency.entity.Currency;
 import com.nina.montrack.currency.service.CurrencyService;
 import com.nina.montrack.exceptions.DataNotFoundException;
+import com.nina.montrack.responses.Response;
 import com.nina.montrack.wallet.entity.dto.WalletDto;
 import com.nina.montrack.user.entity.Users;
 import com.nina.montrack.user.service.UsersService;
@@ -13,6 +14,8 @@ import com.nina.montrack.wallet.service.WalletService;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,11 +34,11 @@ public class WalletServiceImpl implements WalletService {
 
   @Override
   public List<Wallet> getUserWallets(Long userId) {
-    Optional<Users> checkUser = usersService.findById(userId);
-    if (checkUser.isEmpty()) {
-      throw new DataNotFoundException("User not found");
+    Optional<Users> user = usersService.findById(userId);
+    if (user.isPresent()) {
+      return user.get().getWallets();
     } else {
-      return walletRepository.findByUserId(userId);
+      throw new DataNotFoundException("User not found");
     }
   }
 
@@ -88,8 +91,21 @@ public class WalletServiceImpl implements WalletService {
     return walletRepository.save(newWallet);
   }
 
-//  @Override
-//  public Wallet updateupdateUserWallet(UpdateWalletRequest request) {
-//
-//  }
+  @Override
+  public ResponseEntity<Response<Void>> setActiveWallet(Long userId, Long walletId) {
+    Wallet thisWallet = getWallet(userId, walletId);
+    List<Wallet> walletList = getUserWallets(userId);
+
+    // set all wallets as false
+    for (Wallet each: walletList) {
+      each.setIsActive(false);
+      walletRepository.save(each);
+    }
+
+    // set this current one active
+    thisWallet.setIsActive(true);
+    walletRepository.save(thisWallet);
+
+    return Response.successfulResponse(HttpStatus.OK.value(), "Wallet updated successfully");
+  }
 }

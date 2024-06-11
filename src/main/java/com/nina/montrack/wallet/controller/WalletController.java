@@ -6,6 +6,7 @@ import com.nina.montrack.user.service.UsersService;
 import com.nina.montrack.wallet.entity.dto.WalletDto;
 import com.nina.montrack.responses.Response;
 import com.nina.montrack.wallet.entity.Wallet;
+import com.nina.montrack.wallet.repository.WalletRepository;
 import com.nina.montrack.wallet.service.WalletService;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,7 @@ public class WalletController {
 
   private final WalletService walletService;
   private final UsersService usersService;
+  private final WalletRepository walletRepository;
 
   @GetMapping("/wallets")
   public List<Wallet> getWallets() {
@@ -67,5 +69,10 @@ public class WalletController {
     } else {
       return Response.failedResponse(HttpStatus.NOT_FOUND.value(), "User not found!");
     }
+  }
+
+  @PutMapping("/users/{userId}/wallets/{walletId}/active")
+  public void setActiveWallet(@PathVariable Long userId, @PathVariable Long walletId) {
+    walletService.setActiveWallet(userId, walletId);
   }
 }
