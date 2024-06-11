@@ -92,7 +92,7 @@ public class WalletServiceImpl implements WalletService {
   }
 
   @Override
-  public ResponseEntity<Response<Void>> setActiveWallet(Long userId, Long walletId) {
+  public ResponseEntity<Response<Wallet>> setActiveWallet(Long userId, Long walletId) {
     Wallet thisWallet = getWallet(userId, walletId);
     List<Wallet> walletList = getUserWallets(userId);
 
@@ -106,6 +106,6 @@ public class WalletServiceImpl implements WalletService {
     thisWallet.setIsActive(true);
     walletRepository.save(thisWallet);
 
-    return Response.successfulResponse(HttpStatus.OK.value(), "Wallet updated successfully");
+    return Response.successfulResponse(HttpStatus.OK.value(), "Wallet updated successfully", thisWallet);
   }
 }

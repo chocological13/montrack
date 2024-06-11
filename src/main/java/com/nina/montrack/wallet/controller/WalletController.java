@@ -73,7 +73,7 @@ public class WalletController {
 
   // set active
   @PutMapping("/users/{userId}/wallets/{walletId}/active")
-  public void setActiveWallet(@PathVariable Long userId, @PathVariable Long walletId) {
-    walletService.setActiveWallet(userId, walletId);
+  public ResponseEntity<Response<Wallet>> setActiveWallet(@PathVariable Long userId, @PathVariable Long walletId) {
+    return walletService.setActiveWallet(userId, walletId);
   }
 }

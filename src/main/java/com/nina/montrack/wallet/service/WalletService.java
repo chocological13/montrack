@@ -18,6 +18,6 @@ public interface WalletService {
 
   Wallet updateUserWallet(WalletDto request);
 
-  ResponseEntity<Response<Void>> setActiveWallet(Long userId, Long walletId);
+  ResponseEntity<Response<Wallet>> setActiveWallet(Long userId, Long walletId);
 
 }
