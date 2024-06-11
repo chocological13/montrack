@@ -1,5 +1,6 @@
 package com.nina.montrack.wallet.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nina.montrack.currency.entity.Currency;
 import com.nina.montrack.user.entity.Users;
 import jakarta.persistence.CascadeType;
@@ -38,6 +39,7 @@ public class Wallet {
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+  @JsonIgnore
   private Users user;
 
   @Column(name = "wallet_name", nullable = false, length = 50)
