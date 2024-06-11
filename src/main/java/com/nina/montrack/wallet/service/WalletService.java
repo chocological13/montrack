@@ -10,7 +10,9 @@ public interface WalletService {
 
   List<Wallet> getUserWallets(Long userId);
 
+//  Wallet getWallet(Long walletId);
+
   Wallet addUserWallet(WalletDto request);
 
-//  Wallet editUserWallet(WalletDto request);
+  Wallet updateUserWallet(WalletDto request);
 }

@@ -57,22 +57,23 @@ public class WalletServiceImpl implements WalletService {
     }
   }
 
-//  @Override
-//  public Wallet editUserWallet(WalletDto request) {
-//    Users user = usersService.findById(request.getUser());
-//    Currency currency = currencyService.findById(request.getCurrency()).orElse(null);
-//    Wallet editWallet = new Wallet();
-//    editWallet.setUser(user);
-//    editWallet.setWalletName(request.getWalletName());
-//    editWallet.setCurrency(currency);
-//    editWallet.setBalance(request.getBalance());
-//    editWallet.setIsDefault(request.getIsDefault());
-//    editWallet.setDeletedAt(request.getDeletedAt());
-//    return walletRepository.save(editWallet);
-//  }
+  @Override
+  public Wallet updateUserWallet(WalletDto request) {
+    Users user = usersService.findById(request.getUser());
+    Currency currency = currencyService.findById(request.getCurrency()).orElse(null);
+    Wallet editWallet = walletRepository.findById(request.getId()).orElse(null);
+    editWallet.setUser(user);
+    editWallet.setWalletName(request.getWalletName());
+    editWallet.setCurrency(currency);
+    editWallet.setBalance(request.getBalance());
+    editWallet.setIsDefault(request.getIsDefault());
+    editWallet.setDeletedAt(request.getDeletedAt());
+    editWallet.setIsActive(request.getIsActive());
+    return walletRepository.save(editWallet);
+  }
 
 //  @Override
-//  public Wallet editUserWallet(UpdateWalletRequest request) {
+//  public Wallet updateupdateUserWallet(UpdateWalletRequest request) {
 //
 //  }
 }

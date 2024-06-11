@@ -8,10 +8,12 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class WalletDto {
+  private Long id;
   private Long user;
   private String walletName;
   private Long currency;
   private BigDecimal balance;
   private Boolean isDefault;
   private Instant deletedAt;
+  private Boolean isActive;
 }

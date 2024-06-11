@@ -44,7 +44,7 @@ public class Wallet {
   private String walletName;
 
   @JoinColumn(name = "currency_id", referencedColumnName = "id")
-  @OneToOne(cascade = CascadeType.MERGE)
+  @OneToOne(cascade = CascadeType.ALL)
   @ColumnDefault("1")
   private Currency currency;
 
@@ -65,6 +65,9 @@ public class Wallet {
 
   @Column(name = "deleted_at")
   private Instant deletedAt;
+
+  @Column(name = "is_active")
+  private Boolean isActive;
 
   @PrePersist
   protected void onCreate() {
