@@ -30,15 +30,12 @@ public class WalletServiceImpl implements WalletService {
   }
 
   @Override
-  public List<Wallet> getUserWallets(Long userId, Long id) {
+  public List<Wallet> getUserWallets(Long userId) {
     Optional<Users> checkUser = usersService.optFindById(userId);
-    Optional<Wallet> checkWallet = walletRepository.findById(id);
     if (checkUser.isEmpty()) {
       throw new DataNotFoundException("User not found");
-    } else if (checkWallet.isEmpty()) {
-      throw new DataNotFoundException("Wallet not found");
     } else {
-      return walletRepository.findByUserIdAndId(userId, id);
+      return walletRepository.findByUserId(userId);
     }
   }
 

@@ -8,7 +8,7 @@ public interface WalletService {
 
   List<Wallet> getWallets();
 
-  List<Wallet> getUserWallets(Long userId, Long id);
+  List<Wallet> getUserWallets(Long userId);
 
   Wallet addUserWallet(WalletDto request);
 
