@@ -31,7 +31,7 @@ public class UsersController {
   @GetMapping("/{id}")
   public ResponseEntity<Response<Users>> getUserById(@PathVariable Long id) {
     return Response.successfulResponse(HttpStatus.ACCEPTED.value(), "Now displaying user Id " + id,
-        usersService.findById(id));
+        usersService.getById(id));
   }
 
   @PostMapping

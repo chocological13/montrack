@@ -19,7 +19,7 @@ public class WalletMapperImpl implements WalletMapper {
 
   @Override
   public Users mapUser(Long id) {
-    return usersService.findById(id);
+    return usersService.getById(id);
   }
 
   @Override

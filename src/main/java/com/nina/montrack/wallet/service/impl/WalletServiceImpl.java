@@ -25,13 +25,13 @@ public class WalletServiceImpl implements WalletService {
 //  private final WalletMapper walletMapper;
 
   @Override
-  public List<Wallet> getWallets() {
+  public List<Wallet> getAllWallets() {
     return walletRepository.findAll();
   }
 
   @Override
   public List<Wallet> getUserWallets(Long userId) {
-    Optional<Users> checkUser = usersService.optFindById(userId);
+    Optional<Users> checkUser = usersService.findById(userId);
     if (checkUser.isEmpty()) {
       throw new DataNotFoundException("User not found");
     } else {
@@ -40,36 +40,52 @@ public class WalletServiceImpl implements WalletService {
   }
 
   @Override
+  public Wallet getWallet(Long userId, Long walletId) {
+    if (usersService.findById(userId).isPresent()) {
+      Optional<Wallet> walletOptional = walletRepository.findById(walletId);
+      if (walletOptional.isPresent()) {
+        return walletOptional.get();
+      } else {
+        throw new DataNotFoundException("Wallet not found");
+      }
+    }
+    throw new DataNotFoundException("User not found");
+  }
+
+  @Override
   public Wallet addUserWallet(WalletDto request) {
-    Optional<Users> userOptional = usersService.optFindById(request.getUser());
+    Optional<Users> userOptional = usersService.findById(request.getUser());
     Optional<Currency> currencyOptional = currencyService.findById(request.getCurrency());
     if (userOptional.isEmpty()) {
       return null;
     } else {
       Wallet newWallet = new Wallet();
-      newWallet.setUser(userOptional.get());
-      newWallet.setWalletName(request.getWalletName());
-      newWallet.setCurrency(currencyOptional.orElse(null));
-      newWallet.setBalance(request.getBalance());
-      newWallet.setIsDefault(request.getIsDefault());
-      return walletRepository.save(newWallet);
+      return setWallet(newWallet, request);
 //      return walletRepository.save(walletMapper.toWallet(request)); ?????
     }
   }
 
   @Override
   public Wallet updateUserWallet(WalletDto request) {
-    Users user = usersService.findById(request.getUser());
-    Currency currency = currencyService.findById(request.getCurrency()).orElse(null);
-    Wallet editWallet = walletRepository.findById(request.getId()).orElse(null);
-    editWallet.setUser(user);
-    editWallet.setWalletName(request.getWalletName());
-    editWallet.setCurrency(currency);
-    editWallet.setBalance(request.getBalance());
-    editWallet.setIsDefault(request.getIsDefault());
-    editWallet.setDeletedAt(request.getDeletedAt());
-    editWallet.setIsActive(request.getIsActive());
-    return walletRepository.save(editWallet);
+    Optional<Users> user = usersService.findById(request.getUser());
+    if (user.isPresent()) {
+      Currency currency = currencyService.findById(request.getCurrency()).orElse(null);
+      Wallet editWallet = walletRepository.findById(request.getId()).orElse(null);
+      return setWallet(editWallet, request);
+    } else {
+      throw new DataNotFoundException("User not found");
+    }
+  }
+
+  private Wallet setWallet(Wallet newWallet, WalletDto request) {
+    newWallet.setUser(usersService.getById(request.getUser()));
+    newWallet.setWalletName(request.getWalletName());
+    newWallet.setCurrency(currencyService.findById(request.getCurrency()).orElse(null));
+    newWallet.setBalance(request.getBalance());
+    newWallet.setIsDefault(request.getIsDefault());
+    newWallet.setDeletedAt(request.getDeletedAt());
+    newWallet.setIsActive(request.getIsActive());
+    return walletRepository.save(newWallet);
   }
 
 //  @Override

@@ -8,8 +8,9 @@ public interface UsersService {
 
   List<Users> findAll();
 
-  Users findById(Long id);
-  Optional<Users> optFindById(Long id);
+  Users getById(Long id);
+
+  Optional<Users> findById(Long id);
 
   Users save(Users user);
 

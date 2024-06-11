@@ -1,5 +1,6 @@
 package com.nina.montrack.wallet.controller;
 
+import com.nina.montrack.exceptions.DataNotFoundException;
 import com.nina.montrack.user.entity.Users;
 import com.nina.montrack.user.service.UsersService;
 import com.nina.montrack.wallet.entity.dto.WalletDto;
@@ -29,7 +30,7 @@ public class WalletController {
 
   @GetMapping("/wallets")
   public List<Wallet> getWallets() {
-    return walletService.getWallets();
+    return walletService.getAllWallets();
   }
 
   @GetMapping("/users/{userId}/wallets")
@@ -37,6 +38,17 @@ public class WalletController {
     List<Wallet> usersWallets = walletService.getUserWallets(userId);
     return Response.successfulResponse(HttpStatus.FOUND.value(),
         "Displaying wallets for user ID " + userId, usersWallets);
+  }
+
+  @GetMapping("/users/{userId}/wallets/{id}")
+  public ResponseEntity<Response<Wallet>> getWallet(@PathVariable Long userId, @PathVariable Long id) {
+    try {
+      Wallet wallet = walletService.getWallet(userId, id);
+      return Response.successfulResponse(HttpStatus.OK.value(), "Showing wallet ID " + id
+          + " for user ID " + userId, wallet);
+    } catch (DataNotFoundException e) {
+      return Response.failedResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
+    }
   }
 
   @PostMapping("/users/{userId}/wallets")
@@ -48,7 +60,7 @@ public class WalletController {
   @PutMapping("/users/{userId}/wallets/{id}")
   public ResponseEntity<Response<Wallet>> updateUserWallet(@PathVariable Long userId,
       @PathVariable Long id, @RequestBody WalletDto request) {
-    Optional<Users> usersOptional = usersService.optFindById(userId);
+    Optional<Users> usersOptional = usersService.findById(userId);
     if (usersOptional.isPresent()) {
       Wallet updatedWallet = walletService.updateUserWallet(request);
       return Response.successfulResponse(HttpStatus.ACCEPTED.value(), "Wallet successfully updated!", updatedWallet);

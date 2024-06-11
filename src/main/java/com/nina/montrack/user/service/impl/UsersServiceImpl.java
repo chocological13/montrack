@@ -24,7 +24,7 @@ public class UsersServiceImpl implements UsersService {
   }
 
   @Override
-  public Users findById(Long id) {
+  public Users getById(Long id) {
     Optional<Users> user = usersRepository.findById(id);
     if (user.isPresent()) {
       return user.get();
@@ -34,7 +34,7 @@ public class UsersServiceImpl implements UsersService {
   }
 
   @Override
-  public Optional<Users> optFindById(Long id) {
+  public Optional<Users> findById(Long id) {
     return usersRepository.findById(id);
   }
 

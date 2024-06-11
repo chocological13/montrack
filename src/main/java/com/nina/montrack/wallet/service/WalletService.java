@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface WalletService {
 
-  List<Wallet> getWallets();
+  List<Wallet> getAllWallets();
 
   List<Wallet> getUserWallets(Long userId);
 
-//  Wallet getWallet(Long walletId);
+  Wallet getWallet(Long userId, Long walletId);
 
   Wallet addUserWallet(WalletDto request);
 
