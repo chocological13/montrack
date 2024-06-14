@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-public class WalletDto {
+public class RequestWalletDto {
   private Long id;
   private Long user;
   private String walletName;

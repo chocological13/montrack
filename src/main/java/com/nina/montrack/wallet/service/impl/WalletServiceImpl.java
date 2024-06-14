@@ -4,7 +4,7 @@ import com.nina.montrack.currency.entity.Currency;
 import com.nina.montrack.currency.service.CurrencyService;
 import com.nina.montrack.exceptions.DataNotFoundException;
 import com.nina.montrack.responses.Response;
-import com.nina.montrack.wallet.entity.dto.WalletDto;
+import com.nina.montrack.wallet.entity.dto.RequestWalletDto;
 import com.nina.montrack.user.entity.Users;
 import com.nina.montrack.user.service.UsersService;
 import com.nina.montrack.wallet.entity.Wallet;
@@ -56,7 +56,7 @@ public class WalletServiceImpl implements WalletService {
   }
 
   @Override
-  public Wallet addUserWallet(WalletDto request) {
+  public Wallet addUserWallet(RequestWalletDto request) {
     Optional<Users> userOptional = usersService.findById(request.getUser());
     Optional<Currency> currencyOptional = currencyService.findById(request.getCurrency());
     if (userOptional.isEmpty()) {
@@ -69,7 +69,7 @@ public class WalletServiceImpl implements WalletService {
   }
 
   @Override
-  public Wallet updateUserWallet(WalletDto request) {
+  public Wallet updateUserWallet(RequestWalletDto request) {
     Optional<Users> user = usersService.findById(request.getUser());
     if (user.isPresent()) {
       Currency currency = currencyService.findById(request.getCurrency()).orElse(null);
@@ -80,7 +80,7 @@ public class WalletServiceImpl implements WalletService {
     }
   }
 
-  private Wallet setWallet(Wallet newWallet, WalletDto request) {
+  private Wallet setWallet(Wallet newWallet, RequestWalletDto request) {
     newWallet.setUser(usersService.getById(request.getUser()));
     newWallet.setWalletName(request.getWalletName());
     newWallet.setCurrency(currencyService.findById(request.getCurrency()).orElse(null));

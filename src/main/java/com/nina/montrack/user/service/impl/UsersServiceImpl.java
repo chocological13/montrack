@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class UsersServiceImpl implements UsersService {
 
   private final UsersRepository usersRepository;
+  private final PasswordEncoder passwordEncoder;
 
   @Override
   public List<Users> findAll() {
@@ -40,6 +42,8 @@ public class UsersServiceImpl implements UsersService {
 
   @Override
   public Users save(Users user) {
+    String encodedPassword = passwordEncoder.encode(user.getPassword());
+    user.setPassword(encodedPassword);
     return usersRepository.save(user);
   }
 

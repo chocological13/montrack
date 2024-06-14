@@ -4,7 +4,7 @@ import com.nina.montrack.currency.entity.Currency;
 import com.nina.montrack.currency.service.CurrencyService;
 import com.nina.montrack.user.entity.Users;
 import com.nina.montrack.user.service.UsersService;
-import com.nina.montrack.wallet.entity.dto.WalletDto;
+import com.nina.montrack.wallet.entity.dto.RequestWalletDto;
 import com.nina.montrack.wallet.entity.Wallet;
 import com.nina.montrack.wallet.entity.dto.mapper.WalletMapper;
 import lombok.Data;
@@ -28,15 +28,15 @@ public class WalletMapperImpl implements WalletMapper {
   }
 
   @Override
-  public Wallet toWallet(WalletDto walletDto) {
+  public Wallet toWallet(RequestWalletDto requestWalletDto) {
 
     Wallet wallet = new Wallet();
-    wallet.setUser(mapUser(walletDto.getUser()));
-    wallet.setWalletName(walletDto.getWalletName());
-    wallet.setCurrency(mapCurrency(walletDto.getCurrency()));
-    wallet.setBalance(walletDto.getBalance());
-    wallet.setIsDefault(walletDto.getIsDefault());
-    wallet.setDeletedAt(walletDto.getDeletedAt());
+    wallet.setUser(mapUser(requestWalletDto.getUser()));
+    wallet.setWalletName(requestWalletDto.getWalletName());
+    wallet.setCurrency(mapCurrency(requestWalletDto.getCurrency()));
+    wallet.setBalance(requestWalletDto.getBalance());
+    wallet.setIsDefault(requestWalletDto.getIsDefault());
+    wallet.setDeletedAt(requestWalletDto.getDeletedAt());
     return wallet;
   }
 }

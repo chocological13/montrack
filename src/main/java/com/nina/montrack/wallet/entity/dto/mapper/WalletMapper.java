@@ -2,7 +2,7 @@ package com.nina.montrack.wallet.entity.dto.mapper;
 
 import com.nina.montrack.currency.entity.Currency;
 import com.nina.montrack.user.entity.Users;
-import com.nina.montrack.wallet.entity.dto.WalletDto;
+import com.nina.montrack.wallet.entity.dto.RequestWalletDto;
 import com.nina.montrack.wallet.entity.Wallet;
 import org.mapstruct.Mapper;
 
@@ -14,5 +14,5 @@ public interface WalletMapper {
 
   Currency mapCurrency(Long id);
 
-  Wallet toWallet(WalletDto walletDto);
+  Wallet toWallet(RequestWalletDto requestWalletDto);
 }

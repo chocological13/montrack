@@ -34,11 +34,6 @@ public class Pocket {
   @Column(name = "id", nullable = false)
   private Long id;
 
-  @NotNull(message = "Must be tied to a user")
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "user_id", nullable = false)
-  private Users user;
-
   @NotNull(message = "Pocket must have a name")
   @Column(name = "pocket_name", length = 50, nullable = false)
   private String pocketName;
