@@ -5,9 +5,11 @@ import com.nina.montrack.auth.dto.LoginResponseDto;
 import com.nina.montrack.auth.entity.AuthUser;
 import com.nina.montrack.auth.service.AuthService;
 import com.nina.montrack.responses.Response;
+import jakarta.servlet.http.Cookie;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,6 +47,9 @@ public class AuthController {
             loginRequestDto.getPassword()));
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
+    var ctx = SecurityContextHolder.getContext();
+    ctx.setAuthentication(authentication);
+
     AuthUser userDetails = (AuthUser) authentication.getPrincipal();
     log.info("Token requested for user " + userDetails.getUsername() + " with roles " + userDetails.getAuthorities().toArray()[0]);
     String token = authService.generateToken(authentication);
@@ -52,6 +57,10 @@ public class AuthController {
     LoginResponseDto response = new LoginResponseDto();
     response.setMessage("Successfully logged in");
     response.setToken(token);
-    return Response.successfulResponse(HttpStatus.OK.value(), response.getMessage(), response);
+
+    Cookie cookie = new Cookie("token", token);
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Set-Cookie", cookie.getName() + "=" + cookie.getValue() + "; Path=/; HttpOnly");
+    return ResponseEntity.ok().headers(headers).body(response);
   }
 }

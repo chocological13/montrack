@@ -1,5 +1,6 @@
 package com.nina.montrack.auth.service.impl;
 
+import com.nina.montrack.auth.repository.AuthRedisRepository;
 import com.nina.montrack.auth.service.AuthService;
 import com.nina.montrack.user.service.UsersService;
 import java.time.Instant;
@@ -21,11 +22,13 @@ public class AuthServiceImpl implements AuthService {
   private final JwtEncoder jwtEncoder;
   private final PasswordEncoder passwordEncoder;
   private final UsersService usersService;
+  private final AuthRedisRepository authRedisRepository;
 
-  public AuthServiceImpl(JwtEncoder jwtEncoder, PasswordEncoder passwordEncoder, UsersService usersService) {
+  public AuthServiceImpl(JwtEncoder jwtEncoder, PasswordEncoder passwordEncoder, UsersService usersService, AuthRedisRepository authRedisRepository) {
     this.jwtEncoder = jwtEncoder;
     this.passwordEncoder = passwordEncoder;
     this.usersService = usersService;
+    this.authRedisRepository = authRedisRepository;
   }
 
   @Override
@@ -46,7 +49,9 @@ public class AuthServiceImpl implements AuthService {
         // can add more claims here if you want more data to display
         .build();
 
-    return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    var jwt = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    authRedisRepository.saveJwtKey(authentication.getName(), jwt);
+    return jwt;
   }
 
 }
