@@ -43,22 +43,22 @@ public class SecurityConfig {
     return http.build();
   }
 
-  @Bean
-  public UserDetailsService userDetailsService() {
-    UserDetails admin = User.builder()
-        .username("admin")
-        .password("password")
-        .roles("admin")
-        .build();
-
-    UserDetails user = User.builder()
-        .username("user")
-        .password("password")
-        .roles("user")
-        .build();
-
-    return new InMemoryUserDetailsManager(admin, user);
-  }
+//  @Bean
+//  public UserDetailsService userDetailsService() {
+//    UserDetails admin = User.builder()
+//        .username("admin")
+//        .password("password")
+//        .roles("admin")
+//        .build();
+//
+//    UserDetails user = User.builder()
+//        .username("user")
+//        .password("password")
+//        .roles("user")
+//        .build();
+//
+//    return new InMemoryUserDetailsManager(admin, user);
+//  }
 
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)

@@ -1,4 +1,4 @@
-package com.nina.montrack.user.entity.dto;
+package com.nina.montrack.auth.entity.dto.register;
 
 import com.nina.montrack.user.entity.Users;
 import jakarta.validation.constraints.NotNull;
