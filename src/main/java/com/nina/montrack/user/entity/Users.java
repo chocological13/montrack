@@ -1,26 +1,29 @@
 package com.nina.montrack.user.entity;
 
+import com.nina.montrack.role.entity.Role;
 import com.nina.montrack.wallet.entity.Wallet;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Data
 @Entity
@@ -83,4 +86,9 @@ public class Users {
 
   @OneToMany(mappedBy = "user")
   private List<Wallet> wallets;
+
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinTable(name= "users_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+  private List<Role> role = new ArrayList<>();
 }
