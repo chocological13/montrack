@@ -11,6 +11,7 @@ import com.nina.montrack.user.entity.Users;
 import com.nina.montrack.user.repository.UsersRepository;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Log
 public class AuthController {
 
   private final UserDetailsService userDetailsService;
@@ -62,13 +64,15 @@ public class AuthController {
     Authentication authentication = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
     SecurityContextHolder.getContext().setAuthentication(authentication);
+    log.info(request.getUsername() + " requesting to log in..");
 
-    //Generate token
+    // !TODO: Generate token
 
 
     LoginResponseDto response = new LoginResponseDto();
     response.setMessage("User logged in successfully");
     response.setToken("token");
+    log.info("User logged in successfully");
 
     return new ResponseEntity<>(response, HttpStatus.OK);
   }

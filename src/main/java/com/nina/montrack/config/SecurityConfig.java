@@ -24,7 +24,8 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private CustomUserDetailsService userDetailsService;
+  private final CustomUserDetailsService userDetailsService;
+  private final JwtAuthEntryPoint jwtAuthEntryPoint;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector)
@@ -32,6 +33,7 @@ public class SecurityConfig {
     http
         .csrf(AbstractHttpConfigurer::disable)
         .cors(AbstractHttpConfigurer::disable)
+        .exceptionHandling(e -> e.authenticationEntryPoint(jwtAuthEntryPoint))
         .authorizeHttpRequests(auth -> {
           auth.requestMatchers("/error/**").permitAll();
           auth.requestMatchers("/api/v1/auth/login").permitAll();

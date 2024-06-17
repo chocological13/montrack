@@ -1,7 +1,6 @@
 package com.nina.montrack.config;
 
 import com.nina.montrack.role.entity.Role;
-import com.nina.montrack.user.entity.Users;
 import com.nina.montrack.user.repository.UsersRepository;
 import java.util.Collection;
 import java.util.List;
