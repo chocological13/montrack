@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class AuthRedisRepository {
 
-  private static final String STRING_KEY_PREFIX = "montrack:jwt:strings";
+  private static final String STRING_KEY_PREFIX = "montrack:jwt:strings ";
   private final ValueOperations<String, String> stringOps;
 
   public AuthRedisRepository(RedisTemplate<String, String> redisTemplate) {
@@ -17,6 +17,10 @@ public class AuthRedisRepository {
 
   public void saveJwtKey(String username, String jwtKey) {
     stringOps.set(STRING_KEY_PREFIX + username, jwtKey, 1, TimeUnit.HOURS);
+  }
+
+  public boolean isValid (String username, String token) {
+    return stringOps.get(STRING_KEY_PREFIX + username) != null;
   }
 
   public String getJwtKey(String username) {

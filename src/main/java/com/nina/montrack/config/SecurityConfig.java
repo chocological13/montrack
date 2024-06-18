@@ -65,6 +65,7 @@ public class SecurityConfig {
           auth.requestMatchers("/api/v1/auth/**").permitAll();
           // !this is just to test
           auth.requestMatchers("/api/v1/users/**").permitAll();
+          auth.requestMatchers("/api/v1/auth/forgot-password/**").permitAll();
           auth.requestMatchers("/api/v1/users/register/**").permitAll();
           auth.anyRequest().authenticated();
         })
