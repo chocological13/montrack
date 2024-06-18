@@ -2,13 +2,13 @@ package com.nina.montrack.user.service.impl;
 
 import com.nina.montrack.exceptions.DataNotFoundException;
 import com.nina.montrack.user.entity.Users;
+import com.nina.montrack.user.entity.dto.UserProfileDTO;
 import com.nina.montrack.user.repository.UsersRepository;
 import com.nina.montrack.user.service.UsersService;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,6 +65,17 @@ public class UsersServiceImpl implements UsersService {
     } else {
       throw new RuntimeException("User with id " + user.getId() + " not found.");
     }
+  }
+
+  @Override
+  public Users saveUserProfile(Long id, UserProfileDTO userProfileDTO) {
+    Optional<Users> usersOptional = usersRepository.findById(id);
+    if (usersOptional.isPresent()) {
+      Users user = usersOptional.get();
+      UserProfileDTO userProfile = new UserProfileDTO();
+      return usersRepository.save(userProfile.userProfileToUsers(user, userProfileDTO));
+    }
+    return null;
   }
 
   @Override

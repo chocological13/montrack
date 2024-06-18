@@ -2,6 +2,7 @@ package com.nina.montrack.user.controller;
 
 import com.nina.montrack.responses.Response;
 import com.nina.montrack.user.entity.Users;
+import com.nina.montrack.user.entity.dto.UserProfileDTO;
 import com.nina.montrack.user.service.UsersService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,19 @@ public class UsersController {
   public ResponseEntity<Response<Users>> updateUser(@PathVariable Long id, @RequestBody Users user) {
     return Response.successfulResponse(HttpStatus.ACCEPTED.value(), "Successfully updated user Id " + id,
         usersService.update(id, user));
+  }
+
+  @PutMapping("/{id}/profile")
+  public ResponseEntity<Response<UserProfileDTO>> updateProfile(@PathVariable Long id,
+      @RequestBody UserProfileDTO userProfileDTO) {
+    Users updatedProfile = usersService.saveUserProfile(id, userProfileDTO);
+    if (updatedProfile == null) {
+      return Response.failedResponse(HttpStatus.BAD_REQUEST.value(), "Failed to save user profile");
+    } else {
+      UserProfileDTO updatedProfileDTO = new UserProfileDTO();
+      return Response.successfulResponse(HttpStatus.ACCEPTED.value(), "Successfully updated user profile",
+          updatedProfileDTO.userToUserProfileDTO(updatedProfile));
+    }
   }
 
   @DeleteMapping("/{id}")

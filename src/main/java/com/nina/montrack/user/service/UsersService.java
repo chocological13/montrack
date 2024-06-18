@@ -1,6 +1,7 @@
 package com.nina.montrack.user.service;
 
 import com.nina.montrack.user.entity.Users;
+import com.nina.montrack.user.entity.dto.UserProfileDTO;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,8 @@ public interface UsersService {
   Users save(Users user);
 
   Users update(Long id, Users user);
+
+  Users saveUserProfile(Long id, UserProfileDTO userProfileDTO);
 
   Users softDelete(Long id);
 
