@@ -20,7 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         .findByUsername(username)
         .map(AuthUser::new)
         .orElseThrow(() -> new UsernameNotFoundException("Username not found: " + username));
-    return new AuthUser(user);
+    return user;
   }
 
 }

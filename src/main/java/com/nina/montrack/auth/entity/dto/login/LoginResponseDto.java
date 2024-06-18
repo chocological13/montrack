@@ -1,4 +1,4 @@
-package com.nina.montrack.auth.dto.login;
+package com.nina.montrack.auth.entity.dto.login;
 
 import lombok.Data;
 

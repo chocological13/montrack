@@ -81,6 +81,9 @@ public class Users {
       inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
   private List<Role> roles = new ArrayList<>();
 
+  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  private List<Wallet> wallets;
+
   @PrePersist
   protected void onCreate() {
     createdAt = Instant.now();
@@ -92,7 +95,4 @@ public class Users {
   protected void onUpdate() {
     updatedAt = Instant.now();
   }
-
-  @OneToMany(mappedBy = "user")
-  private List<Wallet> wallets;
 }

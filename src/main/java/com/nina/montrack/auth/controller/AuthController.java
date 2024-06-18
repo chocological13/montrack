@@ -1,18 +1,16 @@
 package com.nina.montrack.auth.controller;
 
-import com.nina.montrack.auth.dto.login.LoginRequestDto;
-import com.nina.montrack.auth.dto.login.LoginResponseDto;
-import com.nina.montrack.auth.dto.register.RegisterRequestDto;
+import com.nina.montrack.auth.entity.dto.login.LoginRequestDto;
+import com.nina.montrack.auth.entity.dto.login.LoginResponseDto;
+import com.nina.montrack.auth.entity.dto.register.RegisterRequestDto;
 import com.nina.montrack.auth.entity.AuthUser;
 import com.nina.montrack.auth.service.AuthService;
-import com.nina.montrack.exceptions.DataNotFoundException;
 import com.nina.montrack.responses.Response;
 import com.nina.montrack.role.entity.Role;
 import com.nina.montrack.role.repository.RoleRepository;
 import com.nina.montrack.user.entity.Users;
 import com.nina.montrack.user.repository.UsersRepository;
 import jakarta.servlet.http.Cookie;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 import lombok.Data;
@@ -46,8 +44,8 @@ public class AuthController {
   private final RoleRepository roleRepository;
 
   @GetMapping
-  public Authentication getPrinciple() {
-    return SecurityContextHolder.getContext().getAuthentication();
+  public Object getPrinciple() {
+    return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
   @PostMapping("/login")

@@ -2,14 +2,14 @@ package com.nina.montrack.auth.entity;
 
 import com.nina.montrack.user.entity.Users;
 import java.util.ArrayList;
-import lombok.Getter;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-@Getter
-public class AuthUser extends Users implements UserDetails {
+@Data
+public class AuthUser implements UserDetails {
 
   private final Users user;
 

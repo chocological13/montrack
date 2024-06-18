@@ -1,21 +1,19 @@
-package com.nina.montrack.auth.dto.login;
+package com.nina.montrack.auth.entity.dto.register;
 
 import com.nina.montrack.user.entity.Users;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class LoginRequestDto {
+public class RegisterRequestDto {
 
-  @NotBlank(message = "Please enter username")
   private String username;
-
-  @NotBlank(message = "Please enter password")
+  private String email;
   private String password;
 
   public Users toEntity() {
     Users user = new Users();
     user.setUsername(username);
+    user.setEmail(email);
     user.setPassword(password);
     return user;
   }
