@@ -12,7 +12,6 @@ import com.nina.montrack.responses.Response;
 import com.nina.montrack.role.entity.Role;
 import com.nina.montrack.role.repository.RoleRepository;
 import com.nina.montrack.user.entity.Users;
-import com.nina.montrack.user.repository.UsersRepository;
 import com.nina.montrack.user.service.UsersService;
 import jakarta.servlet.http.Cookie;
 import java.util.Collections;
@@ -24,7 +23,6 @@ import lombok.extern.java.Log;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,7 +30,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,7 +45,6 @@ public class AuthController {
 
   private final AuthService authService;
   private final AuthenticationManager authenticationManager;
-  private final UsersRepository usersRepository;
   private final UsersService usersService;
   private final RoleRepository roleRepository;
   private final AuthRedisRepository authRedisRepository;
@@ -92,8 +88,8 @@ public class AuthController {
     log.info("Requesting login for: " + registerRequestDto.getUsername());
 
     // check if user or email exists
-    Optional<Users> usersOptional = usersRepository.findByUsername(registerRequestDto.getUsername());
-    Optional<Users> usersOptional2 = usersRepository.findByEmail(registerRequestDto.getEmail());
+    Optional<Users> usersOptional = usersService.findByUsername(registerRequestDto.getUsername());
+    Optional<Users> usersOptional2 = usersService.findByEmail(registerRequestDto.getEmail());
     if (usersOptional.isPresent() || usersOptional2.isPresent()) {
       return Response.failedResponse(HttpStatus.BAD_REQUEST.value(), "Username or E-mail already exist. Please enter "
           + "another credentials");
@@ -106,7 +102,7 @@ public class AuthController {
     user.setRoles(Collections.singletonList(roles));
 
     // save user to repo
-    usersRepository.save(user);
+    usersService.save(user);
 
     return Response.successfulResponse(HttpStatus.CREATED.value(), "User registered successfully", user);
 
@@ -117,7 +113,7 @@ public class AuthController {
   public ResponseEntity<Response<ForgotPasswordResponseDTO>> forgotPassword(
       @RequestBody ForgotPasswordRequestDTO request) {
     // check if user exists
-    Optional<Users> user = usersRepository.findByEmail(request.getEmail());
+    Optional<Users> user = usersService.findByEmail(request.getEmail());
     if (user.isEmpty()) {
       return Response.failedResponse(HttpStatus.BAD_REQUEST.value(), "User not found");
     }
@@ -148,7 +144,7 @@ public class AuthController {
     // check if token is valid
     String token = authRedisRepository.getJwtKey(user);
     if (authRedisRepository.isValid(user, token)) {
-      Optional<Users> userOptional = usersRepository.findByUsername(user);
+      Optional<Users> userOptional = usersService.findByUsername(user);
       Users updateUser = userOptional.get();
       updateUser.setPassword(newPassword);
       usersService.save(updateUser);

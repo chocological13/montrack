@@ -12,6 +12,10 @@ public interface UsersService {
 
   Optional<Users> findById(Long id);
 
+  Optional<Users> findByEmail(String email);
+
+  Optional<Users> findByUsername(String username);
+
   Users save(Users user);
 
   Users update(Long id, Users user);

@@ -41,6 +41,16 @@ public class UsersServiceImpl implements UsersService {
   }
 
   @Override
+  public Optional<Users> findByEmail(String email) {
+    return usersRepository.findByEmail(email);
+  }
+
+  @Override
+  public Optional<Users> findByUsername(String username) {
+    return usersRepository.findByUsername(username);
+  }
+
+  @Override
   public Users save(Users user) {
     String encodedPassword = passwordEncoder.encode(user.getPassword());
     user.setPassword(encodedPassword);
