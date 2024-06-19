@@ -15,6 +15,7 @@ import com.nina.montrack.user.entity.Users;
 import com.nina.montrack.user.service.UsersService;
 import jakarta.servlet.http.Cookie;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.Data;
@@ -126,7 +127,6 @@ public class AuthController {
     authRedisRepository.saveJwtKey(tokenIdentifier, resetToken);
 
     // reset password link
-    // ! TODO: make reset password link (other end point?)
     String resetTokenURL = "http://localhost:8080/api/v1/auth/reset-password?user=" + tokenIdentifier;
 
     // ! TODO: send email with the reset password link
@@ -152,5 +152,25 @@ public class AuthController {
     } else {
       return Response.failedResponse(HttpStatus.BAD_REQUEST.value(), "Link invalid");
     }
+  }
+
+  @PostMapping("/logout")
+  public ResponseEntity<Response<Void>> logout(@RequestParam String user) {
+    authRedisRepository.blacklistJwtKey(user);
+    return Response.successfulResponse(HttpStatus.OK.value(), "Logged out successfully");
+  }
+
+  // !experiments
+  @GetMapping("/log")
+  public Map<String, Object> auth(@RequestBody String token) {
+    Map<String, Object> decodedToken = authService.decodeToken(token);
+    log.info("this is token:" + token);
+    log.info("this is decoded: " + decodedToken);
+    return decodedToken;
+  }
+
+  @GetMapping("/isvalid")
+  public boolean logout(@RequestParam String user, @RequestBody String token) {
+    return authRedisRepository.isValid(user, token);
   }
 }

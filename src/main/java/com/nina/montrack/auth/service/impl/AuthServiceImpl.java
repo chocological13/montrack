@@ -5,12 +5,14 @@ import com.nina.montrack.auth.service.AuthService;
 import com.nina.montrack.user.service.UsersService;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.extern.java.Log;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
@@ -20,12 +22,16 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
   private final JwtEncoder jwtEncoder;
+  private final JwtDecoder jwtDecoder;
   private final PasswordEncoder passwordEncoder;
   private final UsersService usersService;
   private final AuthRedisRepository authRedisRepository;
 
-  public AuthServiceImpl(JwtEncoder jwtEncoder, PasswordEncoder passwordEncoder, UsersService usersService, AuthRedisRepository authRedisRepository) {
+  public AuthServiceImpl(JwtEncoder jwtEncoder, JwtDecoder jwtDecoder, PasswordEncoder passwordEncoder,
+      UsersService usersService,
+      AuthRedisRepository authRedisRepository) {
     this.jwtEncoder = jwtEncoder;
+    this.jwtDecoder = jwtDecoder;
     this.passwordEncoder = passwordEncoder;
     this.usersService = usersService;
     this.authRedisRepository = authRedisRepository;
@@ -52,6 +58,17 @@ public class AuthServiceImpl implements AuthService {
     var jwt = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     authRedisRepository.saveJwtKey(authentication.getName(), jwt);
     return jwt;
+  }
+//
+//  @Override
+//  public void logout(Authentication authentication) {
+//
+//  }
+//
+//  private String
+
+  public Map<String, Object> decodeToken(String token) {
+    return jwtDecoder.decode(token).getClaims();
   }
 
 }
